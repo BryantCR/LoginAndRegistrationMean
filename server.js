@@ -54,6 +54,7 @@ app.post( '/register/user', function( request, response ){
     const last_name = request.body.last_name;
     const email = request.body.email;
     const users_password = request.body.users_password;
+    const users_bday = request.body.users_bday;
 
     bcrypt.hash( users_password, 10 )
         .then( encryptedPassword => {
@@ -61,16 +62,23 @@ app.post( '/register/user', function( request, response ){
                 first_name,
                 last_name,
                 email,
-                password : encryptedPassword
+                password : encryptedPassword,
+                users_bday
             };
-            console.log("This user has been added: " + newUser );
+            console.log("This user wants to be added: " + newUser.first_name );
+            console.log("This user wants to be added: " + newUser.last_name );
+            console.log("This user wants to be added: " + newUser.email );
+            console.log("This user wants to be added: " + newUser.password );
+            console.log("This user wants to be added: " + newUser.users_bday );
             UserModel
                 .createUser( newUser )
                 .then( result => {
                     request.session.first_name = result.first_name;
                     request.session.last_name = result.last_name;
                     request.session.email = result.email;
-                    response.redirect( '/' );
+                    request.session.users_bday = result.users_bday;
+                    request.flash( 'registration', 'A new user has been created successfully!' );
+                    response.redirect( '/login' );
                 })
                 .catch( err => {
                     request.flash( 'registration', 'That username is already in use!' );

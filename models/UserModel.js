@@ -22,6 +22,10 @@ const UserSchema = new mongoose.Schema({
         required : true,
         unique : true
     },
+    users_bday : {
+        type : String,
+        required : true
+    },
     password : {
         type : String,
         required : true

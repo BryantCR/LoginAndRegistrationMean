@@ -9,16 +9,16 @@
     <body>
         <main class="d-flex flex-row p-5 justify-content-center">
             <div title="holdleftsideofthepage" class="border border-primary">
-                <form class="p-4 m-5 bg-primary text-white" action="/login/register" method="POST">
+                <form class="p-4 m-5 bg-primary text-white" action="/register/user" method="POST">
                     <div class="pageTittle">
                         <h2>
                             Register
                         </h2>
                     </div>
-                    <div>
-                        <!--
-                            Errors
-                        -->
+                    <div style="background-color: orangered; color: black;" class="error">
+                        <% if( messages.registration ){ %>
+                            <%= messages.registration %>
+                        <% } %>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="first_name">
@@ -44,11 +44,19 @@
                         </label>
                         <input class="form-control " type="password" name="users_password" id="users_password" />
                     </div>
+                    <!--
+                        <div class="mb-3">
+                            <label class="form-label" for="confirm_users_password">
+                                Confirm Password: 
+                            </label>
+                            <input class="form-control" type="password" name="confirm_users_password" id="confirm_users_password" />
+                        </div>
+                    -->
                     <div class="mb-3">
-                        <label class="form-label" for="confirm_users_password">
-                            Confirm Password: 
+                        <label class="form-label" for="users_bday">
+                            Birthday: 
                         </label>
-                        <input class="form-control" type="password" name="confirm_users_password" id="confirm_users_password" />
+                        <input class="form-control " type="text" name="users_bday" id="users_bday" />
                     </div>
                     <div class="col-auto">
                         <input class="btn btn-primary mb-3 bg-dark" type="submit" value="Register" name="buttonSubmitForm" id="buttonSubmitForm">
