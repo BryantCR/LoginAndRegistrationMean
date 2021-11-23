@@ -1,13 +1,10 @@
 console.log("File UserModel is connected here!");
 
 const mongoose = require( 'mongoose' ); // MOngoose for the queries
+const AutoIncrement = require('mongoose-sequence')(mongoose); // Auto-Increment
+
 //const {CommentSchema, CommentModel} = require( './commentModel' ); // Work with a second table
 const UserSchema = new mongoose.Schema({
-    users_id : {
-        type : Number,
-        required : true,
-        unique : true
-    },
     first_name : {
         type : String,
         required : true,
@@ -29,8 +26,10 @@ const UserSchema = new mongoose.Schema({
         type : String,
         required : true
     }
-    //comments : [ CommentSchema ] // line 4
+    //comments : [ CommentSchema ] // line 6
 });
+
+UserSchema.plugin(AutoIncrement, {inc_field: 'users_id'});
 
 const User = mongoose.model( 'users', UserSchema );
 
@@ -44,14 +43,6 @@ const UserModel = {
     getUserById : function( userName ){
         return User.findOne({ userName });
     },
-    autoIncrement : function(users_id){
-        return User.findAndModify({
-            query: { users_id: seqName },
-            update: { $inc: { seqValue: 1 } },
-            new: true
-            
-        });
-    }
     /*updateUserComment : function( id, newComment ){
         return CommentModel.addComment( newComment )
             .then( result => {
@@ -63,12 +54,3 @@ const UserModel = {
 module.exports = {UserModel};
 
 //------------------------- TEST AUTO INCREMENT ----------
-
-// UserModel.getSequenceNextValue.function(seqName) {
-//     var seqDoc = db.users.findAndModify({
-//         query: { users_id: seqName },
-//         update: { $inc: { seqValue: 1 } },
-//         new: true
-//     });
-//     return seqDoc.seqValue;
-// }

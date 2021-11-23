@@ -9,7 +9,7 @@ npm install express-flash
 npm install mongoose-sequence
 npm install --save mongoose-sequence
 
-//grep node//Ver los procesos de node abiertos
+//sudo lsof -iTCP -sTCP:LISTEN | grep node //Ver los procesos de node abiertos
 
 //eliminar procesos = p.kill
  */
@@ -58,7 +58,6 @@ app.post( '/register/user', function( request, response ){
     bcrypt.hash( users_password, 10 )
         .then( encryptedPassword => {
             const newUser = {
-                users_id = UserModel.
                 first_name,
                 last_name,
                 email,
@@ -68,20 +67,20 @@ app.post( '/register/user', function( request, response ){
             UserModel
                 .createUser( newUser )
                 .then( result => {
-                    request.session.firstName = result.firstName;
-                    request.session.lastName = result.lastName;
-                    request.session.userName = result.userName;
-                    response.redirect( '/users' );
+                    request.session.first_name = result.first_name;
+                    request.session.last_name = result.last_name;
+                    request.session.email = result.email;
+                    response.redirect( '/' );
                 })
                 .catch( err => {
                     request.flash( 'registration', 'That username is already in use!' );
-                    response.redirect( '/' );
+                    response.redirect( '/login' );
                 });
         });
 });
 
 
-
+//db.users.insert({first_name: "Bryan", last_name:"Cascante", email:"bryancvargaz@gmail.com", password: "pass1234"})
 
 //--------------------------------------------------------------------------------------------------------------- END OF LOGIN AND REGISTRATION ----------------------------------------------------
 
