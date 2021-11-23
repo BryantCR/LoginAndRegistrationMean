@@ -48,15 +48,15 @@ app.post( '/register/user', function( request, response ){
     const email = request.body.email;
     const users_password = request.body.users_password;
 
-    bcrypt.hash( password, 10 )
+    bcrypt.hash( users_password, 10 )
         .then( encryptedPassword => {
             const newUser = {
                 first_name,
                 last_name,
                 email,
-                users_password : encryptedPassword
+                password : encryptedPassword
             };
-            console.log( newUser );
+            console.log("This user has been added: " + newUser );
             UserModel
                 .createUser( newUser )
                 .then( result => {
