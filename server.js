@@ -6,6 +6,12 @@ npm install mongoose
 npm install bcrypt
 npm install express-session
 npm install express-flash
+npm install mongoose-sequence
+npm install --save mongoose-sequence
+
+//grep node//Ver los procesos de node abiertos
+
+//eliminar procesos = p.kill
  */
 
 const express = require( 'express' );
@@ -13,6 +19,7 @@ const mongoose = require( 'mongoose' );
 const bcrypt = require( 'bcrypt' ); // Encryptar la contraseña
 const session = require( 'express-session' ); //
 const flash = require( 'express-flash' ); // Error messages
+const { UserModel } = require('./models/UserModel');
 const app = express();
 
 mongoose.connect('mongodb://localhost/login_registrations_db1', {useNewUrlParser: true}); // LINK WITH THE DB
@@ -51,6 +58,7 @@ app.post( '/register/user', function( request, response ){
     bcrypt.hash( users_password, 10 )
         .then( encryptedPassword => {
             const newUser = {
+                users_id = UserModel.
                 first_name,
                 last_name,
                 email,

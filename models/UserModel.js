@@ -28,8 +28,8 @@ const UserSchema = new mongoose.Schema({
     password : {
         type : String,
         required : true
-    },
-    comments : [ CommentSchema ]
+    }
+    //comments : [ CommentSchema ] // line 4
 });
 
 const User = mongoose.model( 'users', UserSchema );
@@ -44,12 +44,31 @@ const UserModel = {
     getUserById : function( userName ){
         return User.findOne({ userName });
     },
-    updateUserComment : function( id, newComment ){
+    autoIncrement : function(users_id){
+        return User.findAndModify({
+            query: { users_id: seqName },
+            update: { $inc: { seqValue: 1 } },
+            new: true
+            
+        });
+    }
+    /*updateUserComment : function( id, newComment ){
         return CommentModel.addComment( newComment )
             .then( result => {
                 return User.findByIdAndUpdate({_id: id}, {$push: {comments: result}});
             });
-    }
+    }*/
 };
 
 module.exports = {UserModel};
+
+//------------------------- TEST AUTO INCREMENT ----------
+
+// UserModel.getSequenceNextValue.function(seqName) {
+//     var seqDoc = db.users.findAndModify({
+//         query: { users_id: seqName },
+//         update: { $inc: { seqValue: 1 } },
+//         new: true
+//     });
+//     return seqDoc.seqValue;
+// }
