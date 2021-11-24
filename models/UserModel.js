@@ -1,6 +1,6 @@
 console.log("File UserModel is connected here!");
 
-const mongoose = require( 'mongoose' ); // MOngoose for the queries
+const mongoose = require( 'mongoose' ); // Mongoose for the queries
 const AutoIncrement = require('mongoose-sequence')(mongoose); // Auto-Increment
 
 //const {CommentSchema, CommentModel} = require( './commentModel' ); // Work with a second table
@@ -47,6 +47,9 @@ const UserModel = {
     getUserById : function( userName ){
         return User.findOne({ userName });
     },
+    getUserByEmail : function( userName ){
+        return User.find({ email : userName });
+    },
     /*updateUserComment : function( id, newComment ){
         return CommentModel.addComment( newComment )
             .then( result => {
@@ -57,4 +60,4 @@ const UserModel = {
 
 module.exports = {UserModel};
 
-//------------------------- TEST AUTO INCREMENT ----------
+//------------------------- TEST AUTO INCREMENT ------------

@@ -15,7 +15,7 @@
                             Register
                         </h2>
                     </div>
-                    <div style="background-color: orangered; color: black;" class="error">
+                    <div style="background-color: orangered; color: black; font-weight: bold; border-radius: 3px;" class="error">
                         <% if( messages.registration ){ %>
                             <%= messages.registration %>
                         <% } %>
@@ -70,22 +70,22 @@
                             Login
                         </h2>
                     </div>
-                    <div>
-                        <!--
-                            Errors
-                        -->
+                    <div style="background-color: orangered; color: black; font-weight: bold; border-radius: 3px;" class="error">
+                        <% if( messages.login ){ %>
+                            <%= messages.login %>
+                        <% } %>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="email">
+                        <label class="form-label" for="loginEmail">
                             Email Address: 
                         </label>
-                        <input class="form-control" type="email" id="email" name="email"/>
+                        <input class="form-control" type="email" id="loginEmail" name="loginEmail"/>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="users_password">
+                        <label class="form-label" for="loginUsers_password">
                             Password: 
                         </label>
-                        <input class="form-control" type="password" name="users_password" id="users_password" />
+                        <input class="form-control" type="password" name="loginUsers_password" id="loginUsers_password" />
                     </div>
                     <div class="col-auto">
                         <input class="btn btn-primary mb-3 bg-dark" type="submit" value="Login" name="buttonSubmitForm" id="buttonSubmitForm">

@@ -12,7 +12,7 @@ npm install --save mongoose-sequence
 //sudo lsof -iTCP -sTCP:LISTEN | grep node //Ver los procesos de node abiertos
 
 //eliminar procesos = p.kill
- */
+*/
 
 const express = require( 'express' );
 const mongoose = require( 'mongoose' );
@@ -56,6 +56,7 @@ app.post( '/register/user', function( request, response ){
     const users_password = request.body.users_password;
     const users_bday = request.body.users_bday;
 
+
     bcrypt.hash( users_password, 10 )
         .then( encryptedPassword => {
             const newUser = {
@@ -73,15 +74,15 @@ app.post( '/register/user', function( request, response ){
             UserModel
                 .createUser( newUser )
                 .then( result => {
-                    request.session.first_name = result.first_name;
+                    /*request.session.first_name = result.first_name;
                     request.session.last_name = result.last_name;
                     request.session.email = result.email;
-                    request.session.users_bday = result.users_bday;
+                    request.session.users_bday = result.users_bday;*/
                     request.flash( 'registration', 'A new user has been created successfully!' );
                     response.redirect( '/login' );
                 })
                 .catch( err => {
-                    request.flash( 'registration', 'That username is already in use!' );
+                    request.flash( 'registration', 'That email is already in use!' );
                     response.redirect( '/login' );
                 });
         });
@@ -92,9 +93,68 @@ app.post( '/register/user', function( request, response ){
 
 //--------------------------------------------------------------------------------------------------------------- END OF LOGIN AND REGISTRATION ----------------------------------------------------
 
+//---------------------------------------------------------------------------------- REGISTRATE PART -------------------------------------------------------------------
+
+app.post( '/login/user', function( request, response ){
+    let userName = request.body.loginEmail;
+    console.log( "Result: ", userName );
+    let password = request.body.loginUsers_password;
+
+    UserModel
+        .getUserByEmail( userName )
+        .then( result => {
+            console.log( "Result: ", result );
+            if( result === null ){
+                throw new Error( "That user doesn't exist!" );
+            }
+
+            bcrypt.compare( password, result[0].password )
+                .then( flag => {
+                    if( !flag ){
+                        throw new Error( "Wrong credentials!" );
+                    }
+                    request.session.first_name = result[0].first_name;
+                    request.session.last_name = result[0].last_name;
+                    request.session.email = result[0].email;
+                    request.session.users_bday = result[0].users_bday;
+                    request.session.users_id = result[0].users_id;
+                    response.redirect( '/home' );
+                })
+                .catch( error => {
+                    request.flash( 'login', error.message );
+                    response.redirect( '/' );
+                }); 
+        })
+        .catch( error => {
+            request.flash( 'login', error.message );
+            response.redirect( '/' );
+        });
+});
+
+//-----------------------------------------------------------------------------------------------------------END REGISTER PART --------------------------------------------------
+
 //----------------------------------------------------------------------------------- DISPLAY HOME PART ----------------------------------------------------------------------
 
-
+app.get( '/home', function( request, response ){ // Redirect to login
+    if( request.session.email === undefined ){
+        response.redirect( '/' );
+    }
+    else{
+        UserModel
+            .getUsers()
+            .then( data => {
+                console.log( data );
+                let currentUser = {
+                    first_name : request.session.first_name,
+                    last_name : request.session.last_name,
+                    email : request.session.email,
+                    users_bday : request.session.users_bday,
+                    users_id : request.session.users_id
+                }
+                response.render( 'home', { users : currentUser } );
+            }); 
+    }
+});
 
 //------------------------------------------------------------------------------------------------------- END OF HOME PART -----------------------------------------------------------
 
